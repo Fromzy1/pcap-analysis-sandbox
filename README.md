@@ -13,6 +13,20 @@ python -c "import pyshark, scapy, dpkt, nfstream; print('ok')"
 
 Put `.pcap` / `.pcapng` files under `./pcaps/` and notebooks under `./notebooks/`.
 
+## Examples
+
+See [`examples/`](examples/) for worked examples of the pcap-analysis skill —
+each is a real question, a sample capture, and the report the skill produced:
+
+- [**beacon-c2-detection**](examples/beacon-c2-detection/) — security/IR: spot C2
+  beaconing and emit SIEM-ready IOCs without false-flagging a benign host.
+- [**dns-cascade-502**](examples/dns-cascade-502/) — RCA: is a 502 a DNS failure,
+  a backend failure, or both?
+- [**slow-checkout-stall**](examples/slow-checkout-stall/) — RCA: pin a hang to a
+  TCP zero-window event, with the exact frame and filter.
+- [**before/after benchmark**](examples/before-after-benchmark.md) — with-skill
+  **100%** vs without-skill **80%** pass rate on a deterministic grader.
+
 ## What's installed
 
 ### Native CLI (Ubuntu 22.04 arm64 debs, extracted without root)
