@@ -1,0 +1,48 @@
+{
+  "eval_id": 2,
+  "eval_name": "beacon-security-ir",
+  "summary": {
+    "pass_rate": 0.7142857142857143,
+    "passed": 5,
+    "failed": 2,
+    "total": 7
+  },
+  "expectations": [
+    {
+      "text": "Report identifies 185.220.101.45 as the beacon destination",
+      "passed": true,
+      "evidence": "predicate 'identifies_beacon_dest_ip' returned True on 7593 chars of output"
+    },
+    {
+      "text": "Report identifies the suspicious domain c2-check.examplebad.xyz",
+      "passed": true,
+      "evidence": "predicate 'identifies_beacon_domain' returned True on 7593 chars of output"
+    },
+    {
+      "text": "Report quantifies the ~60-second beacon interval (or 'periodic')",
+      "passed": true,
+      "evidence": "predicate 'identifies_beacon_interval' returned True on 7593 chars of output"
+    },
+    {
+      "text": "Report includes an IOC table / list with the malicious IP and domain",
+      "passed": true,
+      "evidence": "predicate 'includes_ioc_section' returned True on 7593 chars of output"
+    },
+    {
+      "text": "Report does NOT label 93.184.216.34 (example.com) as malicious / C2 at the same severity as the real beacon dest",
+      "passed": false,
+      "evidence": "predicate 'does_not_falsely_flag_example_ip' returned False on 7593 chars of output"
+    },
+    {
+      "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+      "passed": true,
+      "evidence": "predicate 'report_has_structure' returned True on 7593 chars of output"
+    },
+    {
+      "text": "Report cites specific frame numbers as evidence",
+      "passed": false,
+      "evidence": "predicate 'cites_frame_numbers' returned False on 7593 chars of output"
+    }
+  ],
+  "configuration": "without_skill"
+}

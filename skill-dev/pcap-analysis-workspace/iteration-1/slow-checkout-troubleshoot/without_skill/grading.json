@@ -1,0 +1,43 @@
+{
+  "eval_id": 0,
+  "eval_name": "slow-checkout-troubleshoot",
+  "summary": {
+    "pass_rate": 0.8333333333333334,
+    "passed": 5,
+    "failed": 1,
+    "total": 6
+  },
+  "expectations": [
+    {
+      "text": "Report identifies a TCP zero-window event",
+      "passed": true,
+      "evidence": "predicate 'mentions_zero_window' returned True on 6585 chars of output"
+    },
+    {
+      "text": "Report identifies TCP retransmission(s)",
+      "passed": true,
+      "evidence": "predicate 'mentions_retransmit' returned True on 6585 chars of output"
+    },
+    {
+      "text": "Report cites specific frame numbers as evidence (at least 3)",
+      "passed": true,
+      "evidence": "predicate 'cites_frame_numbers' returned True on 6585 chars of output"
+    },
+    {
+      "text": "Report includes at least one concrete tshark/display filter the reader could re-run",
+      "passed": false,
+      "evidence": "predicate 'cites_specific_filter' returned False on 6585 chars of output"
+    },
+    {
+      "text": "Report proposes concrete mitigation or next steps (not just 'monitor')",
+      "passed": true,
+      "evidence": "predicate 'has_mitigation_or_next_steps' returned True on 6585 chars of output"
+    },
+    {
+      "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+      "passed": true,
+      "evidence": "predicate 'report_has_structure' returned True on 6585 chars of output"
+    }
+  ],
+  "configuration": "without_skill"
+}

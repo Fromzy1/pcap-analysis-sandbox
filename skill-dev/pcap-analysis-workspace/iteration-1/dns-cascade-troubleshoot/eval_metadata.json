@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "dns-cascade-troubleshoot",
+  "prompt": "Ops is getting 502 errors from our checkout service and nobody knows why. Here's the capture from the checkout host: /sessions/sweet-trusting-darwin/mnt/pcap_analysis_sandbox/pcaps/eval-dns-cascade.pcap. Is this a DNS problem, a backend problem, or both? I need a short writeup for the incident ticket.",
+  "assertions": [
+    {"id": "mentions_nxdomain",                 "description": "Report identifies NXDOMAIN DNS responses"},
+    {"id": "names_failing_domains",             "description": "Report names at least one of the failing newsvc.* domains"},
+    {"id": "identifies_http_502",               "description": "Report identifies HTTP 502 Bad Gateway responses"},
+    {"id": "names_backend_ip",                  "description": "Report names the backend IP 10.0.3.5 that returned the 502s"},
+    {"id": "addresses_both_dns_and_backend",    "description": "Report discusses both DNS failures AND backend failures (not just one)"},
+    {"id": "cites_frame_numbers",               "description": "Report cites specific frame numbers as evidence"},
+    {"id": "report_has_structure",              "description": "Output has a headed structure with TL;DR or executive summary plus findings"}
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "eval_id": 1,
+  "eval_name": "dns-cascade-troubleshoot",
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  },
+  "expectations": [
+    {
+      "text": "Report identifies NXDOMAIN DNS responses",
+      "passed": true,
+      "evidence": "predicate 'mentions_nxdomain' returned True on 16192 chars of output"
+    },
+    {
+      "text": "Report names at least one of the failing newsvc.* domains",
+      "passed": true,
+      "evidence": "predicate 'names_failing_domains' returned True on 16192 chars of output"
+    },
+    {
+      "text": "Report identifies HTTP 502 Bad Gateway responses",
+      "passed": true,
+      "evidence": "predicate 'identifies_http_502' returned True on 16192 chars of output"
+    },
+    {
+      "text": "Report names the backend IP 10.0.3.5 that returned the 502s",
+      "passed": true,
+      "evidence": "predicate 'names_backend_ip' returned True on 16192 chars of output"
+    },
+    {
+      "text": "Report discusses both DNS failures AND backend failures (not just one)",
+      "passed": true,
+      "evidence": "predicate 'addresses_both_dns_and_backend' returned True on 16192 chars of output"
+    },
+    {
+      "text": "Report cites specific frame numbers as evidence",
+      "passed": true,
+      "evidence": "predicate 'cites_frame_numbers' returned True on 16192 chars of output"
+    },
+    {
+      "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+      "passed": true,
+      "evidence": "predicate 'report_has_structure' returned True on 16192 chars of output"
+    }
+  ],
+  "configuration": "with_skill"
+}

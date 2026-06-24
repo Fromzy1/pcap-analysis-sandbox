@@ -1,0 +1,13 @@
+# Reproducible environment / vendored binaries — rebuilt via activate.sh (see README)
+.venv/
+debs/
+bin/
+cache/
+
+# direnv per-folder account binding (local machine config)
+.envrc
+
+# scratch / OS
+.DS_Store
+*.pyc
+__pycache__/

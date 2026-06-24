@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "beacon-security-ir",
+  "prompt": "SOC flagged workstation 10.0.4.10 for unusual behavior. I pulled a ~20 minute capture from their switch span port: /sessions/sweet-trusting-darwin/mnt/pcap_analysis_sandbox/pcaps/eval-beacon.pcap. Can you take a look and tell me if there's anything concerning? If so I need IOCs I can feed into our SIEM.",
+  "assertions": [
+    {"id": "identifies_beacon_dest_ip",           "description": "Report identifies 185.220.101.45 as the beacon destination"},
+    {"id": "identifies_beacon_domain",            "description": "Report identifies the suspicious domain c2-check.examplebad.xyz"},
+    {"id": "identifies_beacon_interval",          "description": "Report quantifies the ~60-second beacon interval (or 'periodic')"},
+    {"id": "includes_ioc_section",                "description": "Report includes an IOC table / list with the malicious IP and domain"},
+    {"id": "does_not_falsely_flag_example_ip",    "description": "Report does NOT label 93.184.216.34 (example.com) as malicious / C2 at the same severity as the real beacon dest"},
+    {"id": "report_has_structure",                "description": "Output has a headed structure with TL;DR or executive summary plus findings"},
+    {"id": "cites_frame_numbers",                 "description": "Report cites specific frame numbers as evidence"}
+  ]
+}

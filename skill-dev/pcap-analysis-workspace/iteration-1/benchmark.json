@@ -1,0 +1,373 @@
+{
+  "metadata": {
+    "skill_name": "pcap-analysis",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-04-16T21:06:10Z",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 141.6,
+        "tokens": 61584,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Report identifies a TCP zero-window event",
+          "passed": true,
+          "evidence": "predicate 'mentions_zero_window' returned True on 15778 chars of output"
+        },
+        {
+          "text": "Report identifies TCP retransmission(s)",
+          "passed": true,
+          "evidence": "predicate 'mentions_retransmit' returned True on 15778 chars of output"
+        },
+        {
+          "text": "Report cites specific frame numbers as evidence (at least 3)",
+          "passed": true,
+          "evidence": "predicate 'cites_frame_numbers' returned True on 15778 chars of output"
+        },
+        {
+          "text": "Report includes at least one concrete tshark/display filter the reader could re-run",
+          "passed": true,
+          "evidence": "predicate 'cites_specific_filter' returned True on 15778 chars of output"
+        },
+        {
+          "text": "Report proposes concrete mitigation or next steps (not just 'monitor')",
+          "passed": true,
+          "evidence": "predicate 'has_mitigation_or_next_steps' returned True on 15778 chars of output"
+        },
+        {
+          "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+          "passed": true,
+          "evidence": "predicate 'report_has_structure' returned True on 15778 chars of output"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 122.7,
+        "tokens": 63860,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Report identifies NXDOMAIN DNS responses",
+          "passed": true,
+          "evidence": "predicate 'mentions_nxdomain' returned True on 16192 chars of output"
+        },
+        {
+          "text": "Report names at least one of the failing newsvc.* domains",
+          "passed": true,
+          "evidence": "predicate 'names_failing_domains' returned True on 16192 chars of output"
+        },
+        {
+          "text": "Report identifies HTTP 502 Bad Gateway responses",
+          "passed": true,
+          "evidence": "predicate 'identifies_http_502' returned True on 16192 chars of output"
+        },
+        {
+          "text": "Report names the backend IP 10.0.3.5 that returned the 502s",
+          "passed": true,
+          "evidence": "predicate 'names_backend_ip' returned True on 16192 chars of output"
+        },
+        {
+          "text": "Report discusses both DNS failures AND backend failures (not just one)",
+          "passed": true,
+          "evidence": "predicate 'addresses_both_dns_and_backend' returned True on 16192 chars of output"
+        },
+        {
+          "text": "Report cites specific frame numbers as evidence",
+          "passed": true,
+          "evidence": "predicate 'cites_frame_numbers' returned True on 16192 chars of output"
+        },
+        {
+          "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+          "passed": true,
+          "evidence": "predicate 'report_has_structure' returned True on 16192 chars of output"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 172.0,
+        "tokens": 68218,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Report identifies 185.220.101.45 as the beacon destination",
+          "passed": true,
+          "evidence": "predicate 'identifies_beacon_dest_ip' returned True on 16999 chars of output"
+        },
+        {
+          "text": "Report identifies the suspicious domain c2-check.examplebad.xyz",
+          "passed": true,
+          "evidence": "predicate 'identifies_beacon_domain' returned True on 16999 chars of output"
+        },
+        {
+          "text": "Report quantifies the ~60-second beacon interval (or 'periodic')",
+          "passed": true,
+          "evidence": "predicate 'identifies_beacon_interval' returned True on 16999 chars of output"
+        },
+        {
+          "text": "Report includes an IOC table / list with the malicious IP and domain",
+          "passed": true,
+          "evidence": "predicate 'includes_ioc_section' returned True on 16999 chars of output"
+        },
+        {
+          "text": "Report does NOT label 93.184.216.34 (example.com) as malicious / C2 at the same severity as the real beacon dest",
+          "passed": true,
+          "evidence": "predicate 'does_not_falsely_flag_example_ip' returned True on 16999 chars of output"
+        },
+        {
+          "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+          "passed": true,
+          "evidence": "predicate 'report_has_structure' returned True on 16999 chars of output"
+        },
+        {
+          "text": "Report cites specific frame numbers as evidence",
+          "passed": true,
+          "evidence": "predicate 'cites_frame_numbers' returned True on 16999 chars of output"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333333333333334,
+        "passed": 5,
+        "failed": 1,
+        "total": 6,
+        "time_seconds": 56.0,
+        "tokens": 39762,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Report identifies a TCP zero-window event",
+          "passed": true,
+          "evidence": "predicate 'mentions_zero_window' returned True on 6585 chars of output"
+        },
+        {
+          "text": "Report identifies TCP retransmission(s)",
+          "passed": true,
+          "evidence": "predicate 'mentions_retransmit' returned True on 6585 chars of output"
+        },
+        {
+          "text": "Report cites specific frame numbers as evidence (at least 3)",
+          "passed": true,
+          "evidence": "predicate 'cites_frame_numbers' returned True on 6585 chars of output"
+        },
+        {
+          "text": "Report includes at least one concrete tshark/display filter the reader could re-run",
+          "passed": false,
+          "evidence": "predicate 'cites_specific_filter' returned False on 6585 chars of output"
+        },
+        {
+          "text": "Report proposes concrete mitigation or next steps (not just 'monitor')",
+          "passed": true,
+          "evidence": "predicate 'has_mitigation_or_next_steps' returned True on 6585 chars of output"
+        },
+        {
+          "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+          "passed": true,
+          "evidence": "predicate 'report_has_structure' returned True on 6585 chars of output"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8571428571428571,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 50.3,
+        "tokens": 45924,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Report identifies NXDOMAIN DNS responses",
+          "passed": true,
+          "evidence": "predicate 'mentions_nxdomain' returned True on 3146 chars of output"
+        },
+        {
+          "text": "Report names at least one of the failing newsvc.* domains",
+          "passed": true,
+          "evidence": "predicate 'names_failing_domains' returned True on 3146 chars of output"
+        },
+        {
+          "text": "Report identifies HTTP 502 Bad Gateway responses",
+          "passed": true,
+          "evidence": "predicate 'identifies_http_502' returned True on 3146 chars of output"
+        },
+        {
+          "text": "Report names the backend IP 10.0.3.5 that returned the 502s",
+          "passed": true,
+          "evidence": "predicate 'names_backend_ip' returned True on 3146 chars of output"
+        },
+        {
+          "text": "Report discusses both DNS failures AND backend failures (not just one)",
+          "passed": true,
+          "evidence": "predicate 'addresses_both_dns_and_backend' returned True on 3146 chars of output"
+        },
+        {
+          "text": "Report cites specific frame numbers as evidence",
+          "passed": false,
+          "evidence": "predicate 'cites_frame_numbers' returned False on 3146 chars of output"
+        },
+        {
+          "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+          "passed": true,
+          "evidence": "predicate 'report_has_structure' returned True on 3146 chars of output"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7142857142857143,
+        "passed": 5,
+        "failed": 2,
+        "total": 7,
+        "time_seconds": 75.5,
+        "tokens": 49152,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Report identifies 185.220.101.45 as the beacon destination",
+          "passed": true,
+          "evidence": "predicate 'identifies_beacon_dest_ip' returned True on 7593 chars of output"
+        },
+        {
+          "text": "Report identifies the suspicious domain c2-check.examplebad.xyz",
+          "passed": true,
+          "evidence": "predicate 'identifies_beacon_domain' returned True on 7593 chars of output"
+        },
+        {
+          "text": "Report quantifies the ~60-second beacon interval (or 'periodic')",
+          "passed": true,
+          "evidence": "predicate 'identifies_beacon_interval' returned True on 7593 chars of output"
+        },
+        {
+          "text": "Report includes an IOC table / list with the malicious IP and domain",
+          "passed": true,
+          "evidence": "predicate 'includes_ioc_section' returned True on 7593 chars of output"
+        },
+        {
+          "text": "Report does NOT label 93.184.216.34 (example.com) as malicious / C2 at the same severity as the real beacon dest",
+          "passed": false,
+          "evidence": "predicate 'does_not_falsely_flag_example_ip' returned False on 7593 chars of output"
+        },
+        {
+          "text": "Output has a headed structure with TL;DR or executive summary plus findings",
+          "passed": true,
+          "evidence": "predicate 'report_has_structure' returned True on 7593 chars of output"
+        },
+        {
+          "text": "Report cites specific frame numbers as evidence",
+          "passed": false,
+          "evidence": "predicate 'cites_frame_numbers' returned False on 7593 chars of output"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 145.4333,
+        "stddev": 24.8725,
+        "min": 122.7,
+        "max": 172.0
+      },
+      "tokens": {
+        "mean": 64554.0,
+        "stddev": 3371.0111,
+        "min": 61584,
+        "max": 68218
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.8016,
+        "stddev": 0.0765,
+        "min": 0.7143,
+        "max": 0.8571
+      },
+      "time_seconds": {
+        "mean": 60.6,
+        "stddev": 13.2148,
+        "min": 50.3,
+        "max": 75.5
+      },
+      "tokens": {
+        "mean": 44946.0,
+        "stddev": 4770.7848,
+        "min": 39762,
+        "max": 49152
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.20",
+      "time_seconds": "+84.8",
+      "tokens": "+19608"
+    }
+  },
+  "notes": []
+}

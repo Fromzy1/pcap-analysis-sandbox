@@ -1,0 +1,13 @@
+{
+  "eval_id": 0,
+  "eval_name": "slow-checkout-troubleshoot",
+  "prompt": "Customers have been complaining that our checkout page hangs for several seconds before completing. I grabbed a short client-side capture during one of the slow moments — it's at /sessions/sweet-trusting-darwin/mnt/pcap_analysis_sandbox/pcaps/eval-slow-app.pcap. Can you tell me what's going on and what to do about it? A written analysis I can hand to our network team would be ideal.",
+  "assertions": [
+    {"id": "mentions_zero_window",     "description": "Report identifies a TCP zero-window event"},
+    {"id": "mentions_retransmit",      "description": "Report identifies TCP retransmission(s)"},
+    {"id": "cites_frame_numbers",      "description": "Report cites specific frame numbers as evidence (at least 3)"},
+    {"id": "cites_specific_filter",    "description": "Report includes at least one concrete tshark/display filter the reader could re-run"},
+    {"id": "has_mitigation_or_next_steps", "description": "Report proposes concrete mitigation or next steps (not just 'monitor')"},
+    {"id": "report_has_structure",     "description": "Output has a headed structure with TL;DR or executive summary plus findings"}
+  ]
+}

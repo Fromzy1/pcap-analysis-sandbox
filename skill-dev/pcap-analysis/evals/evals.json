@@ -1,0 +1,26 @@
+{
+  "skill_name": "pcap-analysis",
+  "evals": [
+    {
+      "id": 0,
+      "name": "slow-checkout-troubleshoot",
+      "prompt": "Customers have been complaining that our checkout page hangs for several seconds before completing. I grabbed a short client-side capture during one of the slow moments — it's at /sessions/sweet-trusting-darwin/mnt/pcap_analysis_sandbox/pcaps/eval-slow-app.pcap. Can you tell me what's going on and what to do about it? A written analysis I can hand to our network team would be ideal.",
+      "expected_output": "Structured markdown report. Must identify: a small number of retransmissions affecting one TCP stream, at least one zero-window event, the RTT between client and server (~120ms), and frame references for each finding. Should NOT conclude 'nothing wrong'.",
+      "files": ["pcaps/eval-slow-app.pcap"]
+    },
+    {
+      "id": 1,
+      "name": "dns-cascade-troubleshoot",
+      "prompt": "Ops is getting 502 errors from our checkout service and nobody knows why. Here's the capture from the checkout host: /sessions/sweet-trusting-darwin/mnt/pcap_analysis_sandbox/pcaps/eval-dns-cascade.pcap. Is this a DNS problem, a backend problem, or both? I need a short writeup for the incident ticket.",
+      "expected_output": "Structured markdown report. Must identify: NXDOMAIN responses for some names (newsvc.*), successful resolution for others (api.prod, auth.prod), HTTP 502 responses from the backend that DID resolve. Should distinguish 'DNS failed' from 'backend returned 502' and point to both as contributing factors.",
+      "files": ["pcaps/eval-dns-cascade.pcap"]
+    },
+    {
+      "id": 2,
+      "name": "beacon-security-ir",
+      "prompt": "SOC flagged workstation 10.0.4.10 for unusual behavior. I pulled a ~20 minute capture from their switch span port: /sessions/sweet-trusting-darwin/mnt/pcap_analysis_sandbox/pcaps/eval-beacon.pcap. Can you take a look and tell me if there's anything concerning? If so I need IOCs I can feed into our SIEM.",
+      "expected_output": "Structured markdown report in security/IR mode. Must identify: periodic ~60s-interval small TCP/443 sessions from 10.0.4.10 to 185.220.101.45, the DNS name c2-check.examplebad.xyz that resolves to that IP, consistent small payload sizes. Should include an IOC table (IP, domain, and ideally port/pattern). Should distinguish this from the normal-looking traffic to the other external host.",
+      "files": ["pcaps/eval-beacon.pcap"]
+    }
+  ]
+}
