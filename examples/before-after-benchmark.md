@@ -47,8 +47,30 @@ For quick "what's in this pcap?" glances, an unaided model is fine. For
 frame citation or a false-positive IOC has real downstream cost — the skill's
 discipline (triage → filter → evidence → report) is what gets you to 100%.
 
+## How this was measured
+
+Grading is **deterministic — no LLM judge.**
+[`grade.py`](../skill-dev/pcap-analysis-workspace/grade.py) scores each report with
+Python/regex predicates against the fixed assertions in each scenario's
+`eval_metadata.json` (e.g. *names the failing domains*, *cites ≥3 frame numbers*,
+*includes an IOC table*). That keeps the pass/fail signal objective and free of
+grader drift. The false-positive above is caught by a predicate that scans a
+±2-line window around the benign IP and only fails the run if it's *actively*
+labelled malicious without a nearby "benign/connectivity-canary" rescue.
+
+The per-assertion breakdown for every run renders in the eval review report:
+
+![Eval review report](../assets/eval-review.png)
+
+[**View it live (htmlpreview)**](https://htmlpreview.github.io/?https://github.com/Fromzy1/pcap-analysis-sandbox/blob/main/skill-dev/pcap-analysis-workspace/iteration-1-review.html)
+·
+[raw HTML](../skill-dev/pcap-analysis-workspace/iteration-1-review.html)
+·
+[harness details](../skill-dev/pcap-analysis-workspace/README.md)
+
 ---
 
-*Source data: `skill-dev/pcap-analysis-workspace/iteration-1/` (`benchmark.json`,
-per-scenario `with_skill/` and `without_skill/` outputs). Grading is reproducible
-via `skill-dev/pcap-analysis-workspace/grade.py`.*
+*Source data: [`skill-dev/pcap-analysis-workspace/iteration-1/`](../skill-dev/pcap-analysis-workspace/iteration-1/)
+(`benchmark.json`, per-scenario `with_skill/` and `without_skill/` outputs).
+Grading is reproducible via
+[`grade.py`](../skill-dev/pcap-analysis-workspace/grade.py).*

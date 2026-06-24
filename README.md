@@ -1,128 +1,72 @@
-# pcap_analysis_sandbox
+# pcap-analysis
 
-A self-contained pcap analysis workbench for this machine.
+A production-grade [Claude Code skill](https://docs.claude.com/en/docs/claude-code/skills)
+that analyzes packet captures the way a senior network or security engineer would —
+from a raw `.pcap` to a structured, evidence-backed report. This repo holds the
+skill, the self-contained sandbox it runs in, and the evaluation harness used to
+build and measure it.
+
+It's also a worked example of building an LLM capability properly: clear
+architecture, graceful degradation, and a reproducible benchmark rather than a
+"trust me, it works."
+
+## What this repo demonstrates
+
+- **A skill with a real architecture** — progressive disclosure (a lean
+  `SKILL.md` orchestrator + on-demand reference playbooks + tactical scripts),
+  four-tier graceful degradation by available tooling, and dual-mode routing
+  (performance troubleshooting vs. security/IR). See [`DESIGN.md`](DESIGN.md).
+- **Evidence-first output** — every finding in a report is backed by a re-runnable
+  `tshark` filter and frame references. *"A sentence without a filter behind it is
+  a guess."*
+- **A reproducible eval harness** — synthetic captures with known ground truth,
+  with-skill vs. without-skill runs, and **deterministic, no-LLM-judge** grading.
+
+## The evidence
+
+Each of three scenarios was run with and without the skill (same model, same
+prompt) and graded by deterministic predicates ([`grade.py`](skill-dev/pcap-analysis-workspace/grade.py)):
+
+| | With skill | Without skill |
+|--|-----------|---------------|
+| **Pass rate** | **100% ± 0%** | 80% ± 8% |
+
+The most telling gap: without the skill, the baseline flagged a benign host
+(`example.com`) as a "secondary C2 server" — a false-positive IOC that would
+pollute a SIEM. The skill correctly cleared it.
+
+→ Full write-up: [**examples/before-after-benchmark.md**](examples/before-after-benchmark.md)
+· Interactive per-assertion report:
+[**view live**](https://htmlpreview.github.io/?https://github.com/Fromzy1/pcap-analysis-sandbox/blob/main/skill-dev/pcap-analysis-workspace/iteration-1-review.html)
+([raw](skill-dev/pcap-analysis-workspace/iteration-1-review.html))
+
+![Eval review report](assets/eval-review.png)
+
+## Worked examples
+
+Real questions, the sample capture, and the actual report the skill produced:
+
+| Example | Angle | Demonstrates |
+|---------|-------|--------------|
+| [beacon-c2-detection](examples/beacon-c2-detection/) | Security / IR | Beacon periodicity → SIEM-ready IOCs, without false-flagging a benign host |
+| [dns-cascade-502](examples/dns-cascade-502/) | Performance / RCA | Separating a DNS failure (NXDOMAIN) from a backend failure (HTTP 502) |
+| [slow-checkout-stall](examples/slow-checkout-stall/) | Performance / RCA | Pinning a hang to a TCP zero-window event, with the exact frame + filter |
+
+## Explore
+
+- [**DESIGN.md**](DESIGN.md) — architecture, design decisions, eval methodology, trade-offs.
+- [**examples/**](examples/) — worked examples and the benchmark.
+- [**skill-dev/pcap-analysis/**](skill-dev/pcap-analysis/) — the skill itself
+  (`SKILL.md`, scripts, references, evals).
+- [**skill-dev/pcap-analysis-workspace/**](skill-dev/pcap-analysis-workspace/) —
+  the eval harness (grader, run outputs, HTML report).
+- [**SETUP.md**](SETUP.md) — install/run the sandbox locally.
 
 ## Quick start
 
 ```sh
-cd pcap_analysis_sandbox
-source ./activate.sh
-tshark -v
-python -c "import pyshark, scapy, dpkt, nfstream; print('ok')"
+source ./activate.sh          # enter the sandbox (tshark, scapy, duckdb, …)
+bash skill-dev/pcap-analysis/scripts/triage.sh pcaps/eval-beacon.pcap
 ```
 
-Put `.pcap` / `.pcapng` files under `./pcaps/` and notebooks under `./notebooks/`.
-
-## Examples
-
-See [`examples/`](examples/) for worked examples of the pcap-analysis skill —
-each is a real question, a sample capture, and the report the skill produced:
-
-- [**beacon-c2-detection**](examples/beacon-c2-detection/) — security/IR: spot C2
-  beaconing and emit SIEM-ready IOCs without false-flagging a benign host.
-- [**dns-cascade-502**](examples/dns-cascade-502/) — RCA: is a 502 a DNS failure,
-  a backend failure, or both?
-- [**slow-checkout-stall**](examples/slow-checkout-stall/) — RCA: pin a hang to a
-  TCP zero-window event, with the exact frame and filter.
-- [**before/after benchmark**](examples/before-after-benchmark.md) — with-skill
-  **100%** vs without-skill **80%** pass rate on a deterministic grader.
-
-## What's installed
-
-### Native CLI (Ubuntu 22.04 arm64 debs, extracted without root)
-
-| Binary        | Source package     | Use                                         |
-|---------------|--------------------|---------------------------------------------|
-| `tshark`      | `tshark`           | CLI Wireshark — read/filter/slice pcaps     |
-| `editcap`     | `wireshark-common` | Split, truncate, rewrite timestamps         |
-| `mergecap`    | `wireshark-common` | Merge multiple captures                     |
-| `capinfos`    | `wireshark-common` | Metadata: times, packet counts, hashes      |
-| `reordercap`  | `wireshark-common` | Fix packet order by timestamp               |
-| `dumpcap`     | `wireshark-common` | Low-level live capture front-end            |
-| `rawshark`    | `wireshark-common` | Dissector in field-extraction mode          |
-| `text2pcap`   | `wireshark-common` | Convert ASCII hex dumps back to pcap        |
-| `tcpdump`     | `tcpdump`          | The classic                                 |
-| `tcpreplay`   | `tcpreplay`        | Replay pcaps to an interface                |
-| `tcprewrite`  | `tcpreplay`        | Rewrite headers (MAC, IP, ports)            |
-| `tcpprep`     | `tcpreplay`        | Build a tcpreplay cache file                |
-| `tcpflow`     | `tcpflow`          | Reassemble TCP streams to files             |
-| `tcptrace`    | `tcptrace`         | Connection stats, RTT, retransmit view      |
-| `ngrep`       | `ngrep`            | grep across packet payloads                 |
-| `jq`          | (system)           | JSON handling for `tshark -T json`/`ek`     |
-
-### Python (uv venv at `./.venv`, Python 3.12)
-
-| Package      | Notes                                                |
-|--------------|------------------------------------------------------|
-| `scapy`      | Packet crafting & dissection                         |
-| `pyshark`    | Python wrapper around tshark (full dissector tree)   |
-| `dpkt`       | Fast lightweight parsing                             |
-| `pypacker`   | Lightweight packet parsing / crafting                |
-| `nfstream`   | Flow extraction, ndpi-backed app classification      |
-| `pandas`     | Dataframes for flow/transaction analysis             |
-| `polars`     | Fast columnar dataframes                             |
-| `pyarrow`    | Parquet/feather I/O for bigger datasets              |
-| `duckdb`     | In-process SQL over pcap-derived tables              |
-| `matplotlib` | Plotting                                             |
-| `jupyterlab` | Notebook UI                                          |
-| `ipykernel`, `tqdm`, `rich` | QoL                                   |
-
-## Layout
-
-```
-pcap_analysis_sandbox/
-├── activate.sh          # source this to enter the env
-├── README.md            # this file
-├── bin/                 # micromamba (kept in case of future conda installs)
-├── debs/                # .deb archives — the persistent source of truth
-├── .venv/               # uv-managed Python env (persistent)
-├── cache/               # uv + conda caches (safe to nuke)
-├── pcaps/               # drop captures here
-└── notebooks/           # Jupyter notebooks
-```
-
-On first activation each session, `activate.sh` re-extracts the debs to
-`/sessions/sweet-trusting-darwin/opt` (ext4 scratch, ~instant). That path
-is NOT persistent between sessions — the sandbox lives on a virtiofs
-mount that rejects some deb permissions, so the archives stay in `debs/`
-and the extracted tree is rebuilt on demand.
-
-## What's intentionally NOT installed
-
-These were on the original wish list but excluded from the "lean" install:
-
-- **Zeek**, **Suricata** — large (100+ MB each); add later if you want
-  protocol logs or IDS alerts. Available as jammy arm64 debs; extract with
-  the same pattern (`apt-get download && dpkg-deb -x`).
-- **bulk_extractor**, **foremost** — file-carving from payloads.
-- **nfdump**, **SiLK**, **ntopng** — NetFlow-style aggregation.
-- **captcp**, **xplot** — TCP visualization helpers.
-- **dnstop**, **passivedns**, **sipgrep** — niche protocol views.
-- **ClickHouse** — the Python side has `duckdb` covering the same
-  "SQL over flat logs" use case without a running server.
-
-To add one later:
-
-```sh
-cd pcap_analysis_sandbox/debs
-apt-get download zeek suricata bulk-extractor   # plus their deps
-# then re-source activate.sh
-```
-
-## Quick sanity smoke tests
-
-```sh
-source ./activate.sh
-
-# Create a toy pcap with scapy
-python - <<'PY'
-from scapy.all import IP, TCP, Ether, wrpcap
-pkts = [Ether()/IP(dst="10.0.0.1")/TCP(dport=80, flags="S") for _ in range(5)]
-wrpcap("pcaps/smoke.pcap", pkts)
-print("wrote pcaps/smoke.pcap")
-PY
-
-capinfos pcaps/smoke.pcap
-tshark -r pcaps/smoke.pcap -T fields -e ip.src -e ip.dst -e tcp.flags
-python -c "import pyshark; print(list(pyshark.FileCapture('pcaps/smoke.pcap'))[0])"
-```
+Full setup details are in [SETUP.md](SETUP.md).
